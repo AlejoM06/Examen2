@@ -57,11 +57,11 @@ namespace Examen2.Clases
                 }
                 dbExamen.Pesajes.AddOrUpdate(pesaje);
                 dbExamen.SaveChanges();
-                return "pesaje actualizado correctamente :) ";
+                return "pesaje actualizado correctamente";
             }
             catch (Exception ex)
             {
-                return "No se pudo actualizar el pesaje :( " + ex.Message;
+                return "No se pudo actualizar el pesaje " + ex.Message;
 
             }
         }
@@ -80,11 +80,11 @@ namespace Examen2.Clases
                 dbExamen.Pesajes.Remove(cam);
                 dbExamen.SaveChanges();
 
-                return "pesaje eliminado correctamente :) ";
+                return "pesaje eliminado correctamente";
             }
             catch (Exception ex)
             {
-                return "No se pudo eliminar el pesaje :( " + ex.Message;
+                return "No se pudo eliminar el pesaje " + ex.Message;
 
             }
         }
@@ -135,22 +135,6 @@ namespace Examen2.Clases
                    };
         }
 
-        //public IQueryable ListarImagenes(int idPesaje)
-        //{
-        //    return from C in dbExamen.Set<Camion>()
-        //           join P in dbExamen.Set<Pesaje>()
-        //           on C.Placa equals P.PlacaCamion
-        //           join I in dbExamen.Set<FotoPesaje>()
-        //           on C.Placa equals I.idPesaje
-        //           where C.Placa == idPesaje
-        //           orderby I.ImagenVehiculo
-        //           select new
-        //           {
-        //               idPesaje = P.id,
-        //               Pesaje = P.PlacaCamion,
-        //               idCamion = C.Placa,
-        //               Foto = I.ImagenVehiculo
-        //           };
-        //}
+       
     }
 }
