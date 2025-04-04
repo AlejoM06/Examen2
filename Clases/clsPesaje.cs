@@ -1,6 +1,8 @@
-﻿using Examen2.Models;
+﻿using Antlr.Runtime.Misc;
+using Examen2.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
@@ -11,15 +13,32 @@ namespace Examen2.Clases
 	{
         private DBExamenEntities1 dbExamen = new DBExamenEntities1();
         public Pesaje pesaje { get; set; }
-
+        public Camion camion { get; set; }
         //Insertar
         public string Insertar()
         {
             try
-
             {
+                // Validar si la placa del camión ya existe
+                var camionExistente = dbExamen.Camions.FirstOrDefault(c => c.Placa == pesaje.PlacaCamion);
+
+                if (camionExistente == null)
+                {
+                    // Si no existe, crear e insertar el camión
+                    Camion nuevoCamion = new Camion
+                    {
+                        Placa = pesaje.PlacaCamion,
+                        Marca = camion.Marca,         // Asegúrate que el objeto 'camion' esté definido
+                        NumeroEjes = camion.NumeroEjes
+                    };
+
+                    dbExamen.Camions.Add(nuevoCamion);
+                }
+
+                // Insertar el pesaje
                 dbExamen.Pesajes.Add(pesaje);
                 dbExamen.SaveChanges();
+
                 return "Pesaje insertado correctamente";
             }
             catch (Exception ex)
@@ -97,23 +116,39 @@ namespace Examen2.Clases
             }
         }
 
-        public IQueryable ListarImagenes(int idProducto)
+        public IQueryable ListarFotosPesaje(int idPesaje)
         {
-            return from P in dbSuper.Set<PRODucto>()
-                   join TP in dbSuper.Set<TIpoPRoducto>()
-                   on P.CodigoTipoProducto equals TP.Codigo
-                   join I in dbSuper.Set<ImagenesProducto>()
-                   on P.Codigo equals I.idProducto
-                   where P.Codigo == idProducto
-                   orderby I.NombreImagen
+            return from P in dbExamen.Set<Pesaje>()
+                   join C in dbExamen.Set<Camion>()
+                   on P.PlacaCamion equals C.Placa
+                   join I in dbExamen.Set<FotoPesaje>()
+                   on P.id equals I.idPesaje
+                   where P.id == idPesaje
+                   orderby I.ImagenVehiculo
                    select new
                    {
-                       idTipoProducto = TP.Codigo,
-                       TipoProducto = TP.Nombre,
-                       idProducto = P.Codigo,
-                       Producto = P.Nombre,
-                       Imagen = I.NombreImagen
+                       idPesaje = P.id,
+                       PlacaCamion = C.Placa,
+                       Foto = I.ImagenVehiculo
                    };
         }
+
+        //public IQueryable ListarImagenes(int idPesaje)
+        //{
+        //    return from C in dbExamen.Set<Camion>()
+        //           join P in dbExamen.Set<Pesaje>()
+        //           on C.Placa equals P.PlacaCamion
+        //           join I in dbExamen.Set<FotoPesaje>()
+        //           on C.Placa equals I.idPesaje
+        //           where C.Placa == idPesaje
+        //           orderby I.ImagenVehiculo
+        //           select new
+        //           {
+        //               idPesaje = P.id,
+        //               Pesaje = P.PlacaCamion,
+        //               idCamion = C.Placa,
+        //               Foto = I.ImagenVehiculo
+        //           };
+        //}
     }
 }
