@@ -22,13 +22,15 @@ namespace Examen2.Controllers
         }
 
         [HttpPost]
-        [Route("Insertar")] //Es el nombre del metodo que se va a invocar
-        public string insertar([FromBody] Pesaje pesaje)
+        [Route("Insertar")]
+        public string Insertar([FromBody] RegistroPesaje datos)
         {
-            clsPesaje Pesaje = new clsPesaje();
-            Pesaje.pesaje = pesaje;
-            return Pesaje.Insertar();
+            clsPesaje pesajeManager = new clsPesaje();
+            pesajeManager.pesaje = datos.Pesaje;
+            pesajeManager.camion = datos.Camion;
+            return pesajeManager.Insertar();
         }
+
 
         [HttpPut]
         [Route("Actualizar")]

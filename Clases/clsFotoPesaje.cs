@@ -9,7 +9,7 @@ using System.Web;
 
 namespace proyecto.Clases
 {
-    public class clsupload
+    public class clsFotoPesaje
     {
         public string Datos { get; set; }
         public string Proceso { get; set; }

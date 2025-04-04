@@ -197,6 +197,7 @@
     <Compile Include="Models\Pesaje.cs">
       <DependentUpon>DBExamen.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RegistroPesaje.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

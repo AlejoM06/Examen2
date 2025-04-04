@@ -19,18 +19,25 @@ namespace Examen2.Clases
         {
             try
             {
+                // Validar si el camión existe
                 var camionExiste = dbExamen.Camions.Any(c => c.Placa == pesaje.PlacaCamion);
 
+                // Si no existe, se debe insertar
                 if (!camionExiste)
                 {
-                    throw new Exception("El camión no existe. Debe crear el camión primero.");
+                    if (camion == null)
+                        return "El camión no existe y no se proporcionaron los datos para crearlo.";
+
+                    camion.Placa = pesaje.PlacaCamion; // asegurarse de que coincidan
+                    dbExamen.Camions.Add(camion);
+                    dbExamen.SaveChanges(); // se guarda primero el camión
                 }
 
-                // Si existe, insertamos el pesaje
+                // Insertar el pesaje
                 dbExamen.Pesajes.Add(pesaje);
                 dbExamen.SaveChanges();
+
                 return "Pesaje insertado correctamente";
-                
             }
             catch (Exception ex)
             {

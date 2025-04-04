@@ -16,36 +16,39 @@ namespace Examen2.Controllers
     public class FotosController : ApiController
     {
         [HttpPost]
+        [Route("CargarArchivo")]
         public async Task<HttpResponseMessage> CargarArchivo(HttpRequestMessage request, string Datos, string Proceso)
         {
-            clsupload upload = new clsupload();
+            clsFotoPesaje upload = new clsFotoPesaje();
             upload.Datos = Datos;
             upload.Proceso = Proceso;
             upload.request = request;
             return await upload.GrabarArchivo(false);
         }
         [HttpGet]
-        public HttpResponseMessage ConsultarArchivo(string NombreImagen)
+        [Route("ConsultarArchivo")]
+        public HttpResponseMessage ConsultarArchivo(string Imagen)
         {
-            clsupload upload = new clsupload();
-            return upload.DescargarArchivo(NombreImagen);
+            clsFotoPesaje upload = new clsFotoPesaje();
+            return upload.DescargarArchivo(Imagen);
         }
         [HttpPut]
+        [Route("ActualizarArchivo")]
         public async Task<HttpResponseMessage> ActualizarArchivo(HttpRequestMessage request, string Datos, string Proceso)
         {
-            clsupload upload = new clsupload();
+            clsFotoPesaje upload = new clsFotoPesaje();
             upload.request = request;
             return await upload.GrabarArchivo(true);
         }
         [HttpDelete]
         [Route("EliminarImagen")]
-        public HttpResponseMessage EliminarImagen(string NombreImagen)
+        public HttpResponseMessage EliminarImagen(string Imagen)
         {
             try
             {
                 // Ruta del directorio de archivos
                 string root = HttpContext.Current.Server.MapPath("~/Archivos");
-                string filePath = Path.Combine(root, NombreImagen);
+                string filePath = Path.Combine(root, Imagen);
 
                 // Verificar si el archivo existe y eliminarlo
                 if (File.Exists(filePath))
@@ -60,7 +63,7 @@ namespace Examen2.Controllers
                 // Eliminar la referencia en la base de datos
                 using (var db = new DBExamenEntities1())
                 {
-                    var imagen = db.FotoPesajes.FirstOrDefault(i => i.ImagenVehiculo == NombreImagen);
+                    var imagen = db.FotoPesajes.FirstOrDefault(i => i.ImagenVehiculo == Imagen);
                     if (imagen != null)
                     {
                         db.FotoPesajes.Remove(imagen);
