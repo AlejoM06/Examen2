@@ -52,10 +52,10 @@ namespace Examen2.Controllers
 
         [HttpGet]
         [Route("ConsultarXPlaca")] //Es el nombre del metodo que se va a invocar
-        public Pesaje ConsultarXDocumento(int ID)
+        public Pesaje ConsultarXPlaca(string PlacaCamion)
         {
             clsPesaje Pesaje = new clsPesaje();
-            return Pesaje.Consultar(ID);
+            return Pesaje.Consultar(PlacaCamion);
         }
     }
 }

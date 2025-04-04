@@ -166,6 +166,7 @@
     <Compile Include="Clases\clsCamion.cs" />
     <Compile Include="Clases\clsFotoPesaje.cs" />
     <Compile Include="Clases\clsPesaje.cs" />
+    <Compile Include="Controllers\FotosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PesajeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

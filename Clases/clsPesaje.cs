@@ -19,31 +19,22 @@ namespace Examen2.Clases
         {
             try
             {
-                // Validar si la placa del camión ya existe
-                var camionExistente = dbExamen.Camions.FirstOrDefault(c => c.Placa == pesaje.PlacaCamion);
+                var camionExiste = dbExamen.Camions.Any(c => c.Placa == pesaje.PlacaCamion);
 
-                if (camionExistente == null)
+                if (!camionExiste)
                 {
-                    // Si no existe, crear e insertar el camión
-                    Camion nuevoCamion = new Camion
-                    {
-                        Placa = pesaje.PlacaCamion,
-                        Marca = camion.Marca,         // Asegúrate que el objeto 'camion' esté definido
-                        NumeroEjes = camion.NumeroEjes
-                    };
-
-                    dbExamen.Camions.Add(nuevoCamion);
+                    throw new Exception("El camión no existe. Debe crear el camión primero.");
                 }
 
-                // Insertar el pesaje
+                // Si existe, insertamos el pesaje
                 dbExamen.Pesajes.Add(pesaje);
                 dbExamen.SaveChanges();
-
                 return "Pesaje insertado correctamente";
+                
             }
             catch (Exception ex)
             {
-                return "Error al insertar el Pesaje: " + ex.Message;
+                return "Error al insertar el pesaje: " + ex.Message;
             }
         }
 
@@ -52,7 +43,7 @@ namespace Examen2.Clases
         {
             try
             {
-                Pesaje pes = Consultar(pesaje.id);
+                Pesaje pes = Consultar(pesaje.PlacaCamion);
                 if (pes == null)
                 {
                     return "No existe pesaje registrado con ese código, por ende no se puede actualizar :( ";
@@ -72,7 +63,7 @@ namespace Examen2.Clases
         {
             try
             {
-                Pesaje cam = Consultar(pesaje.id);
+                Pesaje cam = Consultar(pesaje.PlacaCamion);
 
                 if (cam == null)
                 {
@@ -91,9 +82,9 @@ namespace Examen2.Clases
             }
         }
         //Consultar
-        public Pesaje Consultar(int ID)
+        public Pesaje Consultar(string PlacaCamion)
         {
-            return dbExamen.Pesajes.FirstOrDefault(e => e.id == ID);
+            return dbExamen.Pesajes.FirstOrDefault(e => e.PlacaCamion == PlacaCamion);
         }
 
         public string GrabarImagenPesaje(int idPesaje, List<string> Imagenes)
@@ -128,7 +119,11 @@ namespace Examen2.Clases
                    select new
                    {
                        idPesaje = P.id,
+                       Fecha = P.FechaPesaje,
+                       Peso = P.Peso,
                        PlacaCamion = C.Placa,
+                       Marca = C.Marca,
+                       NumeroEjes = C.NumeroEjes,
                        Foto = I.ImagenVehiculo
                    };
         }
